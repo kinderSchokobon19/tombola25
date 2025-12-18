@@ -1,0 +1,230 @@
+.prizes-container {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  justify-content: center;
+}
+
+.prizes-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: slideIn 0.5s ease;
+  width: 100%;
+}
+
+.prizes-card h2 {
+  color: #1a472a;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.prizes-card .description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.prizes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.prize-input-group {
+  animation: slideIn 0.3s ease;
+}
+
+.prize-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.prize-icon-input,
+.prize-name-input,
+.prize-value-input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.prize-icon-input {
+  width: 70px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.prize-name-input {
+  flex: 1;
+  min-width: 150px;
+}
+
+.prize-value-input {
+  flex: 2;
+  min-width: 200px;
+}
+
+.prize-icon-input:focus,
+.prize-name-input:focus,
+.prize-value-input:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.btn-remove {
+  background: #ff5252;
+  color: white;
+  padding: 0.75rem;
+  width: 45px;
+  height: 45px;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove:hover:not(:disabled) {
+  background: #ff1744;
+}
+
+.btn-add-prize {
+  background: #4caf50;
+  color: white;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add-prize:hover {
+  background: #45a049;
+}
+
+.preview-section {
+  margin: 1.5rem 0;
+}
+
+.btn-preview {
+  background: #1976d2;
+  color: white;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-preview:hover {
+  background: #1565c0;
+}
+
+.prizes-preview {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  animation: slideIn 0.3s ease;
+}
+
+.prizes-preview h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.prizes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.prize-card {
+  background: white;
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.prize-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+.prize-emoji {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.prize-card h4 {
+  color: #1a472a;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+}
+
+.prize-card p {
+  color: #666;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.participants-info {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.btn-validate {
+  background: #d4af37;
+  color: #1a472a;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.btn-validate:hover {
+  background: #ffd700;
+}
+
+@media (max-width: 768px) {
+  .prize-row {
+    flex-wrap: wrap;
+  }
+
+  .prize-icon-input {
+    width: 60px;
+  }
+
+  .prize-name-input,
+  .prize-value-input {
+    min-width: 100%;
+    flex: 1;
+  }
+
+  .btn-remove {
+    width: 40px;
+    height: 40px;
+    padding: 0.5rem;
+  }
+
+  .prizes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
