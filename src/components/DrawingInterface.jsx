@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ResultsSummary from './ResultsSummary'
 import '../styles/drawing-interface.css'
 
 export default function DrawingInterface({ participants, prizes, onReset }) {
@@ -7,7 +8,33 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
   const [isDrawing, setIsDrawing] = useState(false)
   const [currentWinner, setCurrentWinner] = useState(null)
   const [currentPrize, setCurrentPrize] = useState(null)
-  const [stats, setStats] = useState({ drawn: 0, total: prizes.length })
+  const [showResultsSummary, setShowResultsSummary] = useState(false)
+
+  // Créer un pool de lots (duplicates les lots selon leur quantity)
+  const createPrizePool = () => {
+    const pool = []
+    prizes.forEach(prize => {
+      const quantity = prize.quantity || 1
+      for (let i = 0; i < quantity; i++) {
+        pool.push(prize)
+      }
+    })
+    return pool
+  }
+
+  const [prizePool, setPrizePool] = useState([])
+  const totalPrizes = prizes.reduce((sum, p) => sum + (p.quantity || 1), 0)
+  const remainingCount = prizePool.length
+
+  // Calculer le nombre de tickets restants pour le gagnant actuel
+  const getCurrentWinnerTickets = () => {
+    if (!currentWinner) return 0
+    return ticketPool.filter(t => t.id === currentWinner.id).length
+  }
+
+  useEffect(() => {
+    setPrizePool(createPrizePool())
+  }, [prizes])
 
   // Créer un pool de tickets
   const createTicketPool = () => {
@@ -27,8 +54,13 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
   }, [participants])
 
   const handleDraw = () => {
-    if (remainingPrizes.length === 0) {
+    if (prizePool.length === 0) {
       alert('Tous les lots ont été attribués!')
+      return
+    }
+
+    if (ticketPool.length === 0) {
+      alert('Pas de tickets restants!')
       return
     }
 
@@ -40,35 +72,105 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
       iterations++
       
       // Afficher un participant aléatoire pendant l'animation
-      const randomParticipant = participants[Math.floor(Math.random() * participants.length)]
-      const randomPrize = remainingPrizes[Math.floor(Math.random() * remainingPrizes.length)]
-      
-      setCurrentWinner(randomParticipant)
-      setCurrentPrize(randomPrize)
+      if (ticketPool.length > 0) {
+        const randomWinner = ticketPool[Math.floor(Math.random() * ticketPool.length)]
+        const randomPrize = prizePool[Math.floor(Math.random() * prizePool.length)]
+        
+        setCurrentWinner(randomWinner)
+        setCurrentPrize(randomPrize)
+      }
 
       if (iterations > 30) {
         clearInterval(interval)
         
         // Tirage final réel (basé sur les tickets)
-        const pool = createTicketPool()
-        const winner = pool[Math.floor(Math.random() * pool.length)]
-        const prizeIndex = Math.floor(Math.random() * remainingPrizes.length)
-        const prize = remainingPrizes[prizeIndex]
+        if (ticketPool.length === 0) {
+          alert('Pas de tickets restants!')
+          setIsDrawing(false)
+          return
+        }
+
+        const winnerIndex = Math.floor(Math.random() * ticketPool.length)
+        const winner = ticketPool[winnerIndex]
+        const prizeIndex = Math.floor(Math.random() * prizePool.length)
+        const prize = prizePool[prizeIndex]
 
         setCurrentWinner(winner)
         setCurrentPrize(prize)
 
-        // Ajouter au palmarès
-        setWinnings([...winnings, { winner, prize }])
+        // Ajouter au palmarès avec le nombre de tickets actuel
+        const remainingTickets = ticketPool.filter(t => t.id === winner.id).length
+        setWinnings([...winnings, { 
+          winner: { ...winner, remainingTickets }, 
+          prize 
+        }])
+
+        // Retirer un ticket du gagnant
+        const newTicketPool = ticketPool.filter((_, idx) => idx !== winnerIndex)
+        setTicketPool(newTicketPool)
 
         // Retirer le lot des restants
-        const newRemaining = remainingPrizes.filter((_, idx) => idx !== prizeIndex)
-        setRemainingPrizes(newRemaining)
-        setStats({ drawn: winnings.length + 1, total: prizes.length })
+        const newRemaining = prizePool.filter((_, idx) => idx !== prizeIndex)
+        setPrizePool(newRemaining)
 
         setIsDrawing(false)
       }
     }, 50)
+  }
+
+  const handleCompleteDrawing = async () => {
+    if (prizePool.length === 0) {
+      alert('Tous les lots ont été attribués!')
+      return
+    }
+
+    if (ticketPool.length === 0) {
+      alert('Pas de tickets restants!')
+      return
+    }
+
+    setIsDrawing(true)
+
+    const newWinnings = [...winnings]
+    let remainingTickets = [...ticketPool]
+    let remaining = [...prizePool]
+    let delay = 0
+
+    // Tirer tous les lots avec délai
+    for (let i = 0; i < prizePool.length; i++) {
+      if (remainingTickets.length === 0) break
+
+      await new Promise(resolve => {
+        setTimeout(() => {
+          const winnerIndex = Math.floor(Math.random() * remainingTickets.length)
+          const winner = remainingTickets[winnerIndex]
+          const prizeIndex = Math.floor(Math.random() * remaining.length)
+          const prize = remaining[prizeIndex]
+
+          setCurrentWinner(winner)
+          setCurrentPrize(prize)
+
+          newWinnings.push({ 
+            winner: { ...winner, remainingTickets: remainingTickets.filter(t => t.id === winner.id).length }, 
+            prize 
+          })
+          setWinnings(newWinnings)
+
+          // Retirer un ticket du gagnant
+          remainingTickets = remainingTickets.filter((_, idx) => idx !== winnerIndex)
+          setTicketPool(remainingTickets)
+
+          // Retirer le lot
+          remaining = remaining.filter((_, idx) => idx !== prizeIndex)
+          setPrizePool(remaining)
+
+          resolve()
+        }, 80 + delay)
+      })
+      delay += 80
+    }
+
+    setIsDrawing(false)
   }
 
   const handleUndo = () => {
@@ -76,8 +178,12 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
 
     const lastWinning = winnings[winnings.length - 1]
     setWinnings(winnings.slice(0, -1))
-    setRemainingPrizes([...remainingPrizes, lastWinning.prize])
-    setStats({ drawn: winnings.length - 1, total: prizes.length })
+    
+    // Remettre le ticket du gagnant dans le pool
+    setTicketPool([...ticketPool, lastWinning.winner])
+    
+    // Remettre le lot
+    setPrizePool([...prizePool, lastWinning.prize])
   }
 
   const handleExport = () => {
@@ -105,7 +211,7 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
               <div className={`winner-card ${!isDrawing ? 'revealed' : ''}`}>
                 <p className="winner-label">🎉 Gagnant 🎉</p>
                 <h2>{currentWinner.name}</h2>
-                <p className="winner-tickets">({currentWinner.tickets} ticket{currentWinner.tickets > 1 ? 's' : ''})</p>
+                <p className="winner-tickets">({getCurrentWinnerTickets()} ticket{getCurrentWinnerTickets() > 1 ? 's' : ''} restant{getCurrentWinnerTickets() > 1 ? 's' : ''})</p>
               </div>
 
               <div className="arrow">→</div>
@@ -124,13 +230,22 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
         </div>
 
         <div className="drawing-controls">
-          <button
-            onClick={handleDraw}
-            disabled={isDrawing || remainingPrizes.length === 0}
-            className="btn-draw"
-          >
-            {isDrawing ? '⏳ Tirage en cours...' : '🎲 Faire un tirage'}
-          </button>
+          <div className="button-group">
+            <button
+              onClick={handleDraw}
+              disabled={isDrawing || prizePool.length === 0}
+              className="btn-draw"
+            >
+              {isDrawing ? '⏳ Tirage en cours...' : '🎲 Faire un tirage'}
+            </button>
+            <button
+              onClick={handleCompleteDrawing}
+              disabled={isDrawing || prizePool.length === 0}
+              className="btn-draw-all"
+            >
+              {isDrawing ? '⏳ Tirage en cours...' : '⚡ Tirage Complet'}
+            </button>
+          </div>
 
           <div className="control-buttons">
             <button
@@ -150,8 +265,8 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
           </div>
 
           <div className="stats">
-            <p className="stat-item">📊 <strong>{stats.drawn}</strong> / {stats.total} lots attribués</p>
-            <p className="stat-item">🎁 <strong>{remainingPrizes.length}</strong> lot(s) restant(s)</p>
+            <p className="stat-item">📊 <strong>{winnings.length}</strong> / {totalPrizes} lots attribués</p>
+            <p className="stat-item">🎁 <strong>{remainingCount}</strong> lot(s) restant(s)</p>
           </div>
         </div>
       </div>
@@ -159,6 +274,11 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
       <div className="results-sidebar">
         <div className="results-header">
           <h3>📋 Résultats</h3>
+          {winnings.length > 0 && (
+            <button onClick={() => setShowResultsSummary(true)} className="btn-view-all">
+              👁️ Voir tous
+            </button>
+          )}
           {winnings.length > 0 && (
             <button onClick={onReset} className="btn-restart">
               🔄 Nouvelle tombola
@@ -184,6 +304,14 @@ export default function DrawingInterface({ participants, prizes, onReset }) {
           )}
         </div>
       </div>
+
+      {showResultsSummary && (
+        <ResultsSummary 
+          winnings={winnings}
+          participants={participants}
+          onClose={() => setShowResultsSummary(false)}
+        />
+      )}
     </div>
   )
 }

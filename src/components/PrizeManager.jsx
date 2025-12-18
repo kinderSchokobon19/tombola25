@@ -1,10 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../styles/prize-manager.css'
 
 export default function PrizeManager({ onPrizesLoaded, participants }) {
   const [prizes, setPrizes] = useState([
-    { id: 1, name: '', value: '', icon: '🎁' },
+    { id: 1, name: '', value: '', icon: '🎁', quantity: 1 },
   ])
+
+  // Charger les lots depuis le fichier prizes.json
+  useEffect(() => {
+    fetch('/prizes.json')
+      .then(res => res.json())
+      .then(data => setPrizes(data))
+      .catch(err => console.log('Pas de fichier prizes.json trouvé'))
+  }, [])
   const [showPreview, setShowPreview] = useState(false)
 
   const handlePrizeChange = (id, field, value) => {
@@ -15,7 +23,7 @@ export default function PrizeManager({ onPrizesLoaded, participants }) {
 
   const handleAddPrize = () => {
     const newId = Math.max(...prizes.map(p => p.id), 0) + 1
-    setPrizes([...prizes, { id: newId, name: '', value: '', icon: '🎁' }])
+    setPrizes([...prizes, { id: newId, name: '', value: '', icon: '🎁', quantity: 1 }])
   }
 
   const handleRemovePrize = (id) => {
@@ -68,6 +76,14 @@ export default function PrizeManager({ onPrizesLoaded, participants }) {
                   value={prize.value}
                   onChange={(e) => handlePrizeChange(prize.id, 'value', e.target.value)}
                   className="prize-value-input"
+                />
+                <input
+                  type="number"
+                  placeholder="Nbre gagnants"
+                  min="1"
+                  value={prize.quantity || 1}
+                  onChange={(e) => handlePrizeChange(prize.id, 'quantity', parseInt(e.target.value))}
+                  className="prize-quantity-input"
                 />
                 <button
                   onClick={() => handleRemovePrize(prize.id)}

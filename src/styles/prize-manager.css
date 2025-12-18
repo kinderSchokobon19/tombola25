@@ -45,7 +45,8 @@
 
 .prize-icon-input,
 .prize-name-input,
-.prize-value-input {
+.prize-value-input,
+.prize-quantity-input {
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -70,9 +71,15 @@
   min-width: 200px;
 }
 
+.prize-quantity-input {
+  width: 80px;
+  text-align: center;
+}
+
 .prize-icon-input:focus,
 .prize-name-input:focus,
-.prize-value-input:focus {
+.prize-value-input:focus,
+.prize-quantity-input:focus {
   outline: none;
   border-color: #d4af37;
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
@@ -213,7 +220,8 @@
   }
 
   .prize-name-input,
-  .prize-value-input {
+  .prize-value-input,
+  .prize-quantity-input {
     min-width: 100%;
     flex: 1;
   }

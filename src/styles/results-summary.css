@@ -1,0 +1,374 @@
+.results-summary-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.results-summary-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 900px;
+  width: 90vh;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 2px solid #f0f0f0;
+  background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-header h2 {
+  color: #1a472a;
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.btn-close {
+  background: transparent;
+  color: #1a472a;
+  font-size: 2rem;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-close:hover {
+  transform: rotate(90deg);
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.results-table {
+  margin-bottom: 2rem;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  align-items: center;
+  transition: all 0.3s ease;
+  animation: slideIn 0.3s ease;
+}
+
+.table-row:hover {
+  background: #fafafa;
+  border-color: #d4af37;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.1);
+}
+
+.col-rank {
+  display: flex;
+  justify-content: center;
+}
+
+.rank-badge {
+  background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+  color: #1a472a;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+.col-winner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.winner-name {
+  font-weight: 600;
+  color: #1a472a;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.winner-tickets {
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.col-prize {
+  display: flex;
+  align-items: center;
+}
+
+.prize-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.prize-emoji {
+  font-size: 2rem;
+  display: block;
+}
+
+.prize-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.prize-detail {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.results-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  color: #d4af37;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #eee;
+  justify-content: flex-end;
+  background: #fafafa;
+  border-radius: 0 0 16px 16px;
+}
+
+.btn-action {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-copy {
+  background: #1976d2;
+  color: white;
+}
+
+.btn-copy:hover {
+  background: #1565c0;
+  transform: translateY(-2px);
+}
+
+.btn-print {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-print:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+.btn-close-modal {
+  background: #999;
+  color: white;
+}
+
+.btn-close-modal:hover {
+  background: #777;
+  transform: translateY(-2px);
+}
+
+/* Print styles */
+@media print {
+  .results-summary-overlay {
+    position: static;
+    background: white;
+  }
+
+  .results-summary-modal {
+    box-shadow: none;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+  }
+
+  .modal-header {
+    border-bottom: 3px solid #d4af37;
+  }
+
+  .modal-footer {
+    display: none;
+  }
+
+  .table-row {
+    break-inside: avoid;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .results-summary-modal {
+    width: 95vw;
+    max-height: 95vh;
+  }
+
+  .modal-header {
+    padding: 1.5rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 40px 1fr;
+    gap: 0.75rem;
+  }
+
+  .col-prize {
+    grid-column: 1 / -1;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+  }
+
+  .prize-emoji {
+    font-size: 1.5rem;
+  }
+
+  .results-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .btn-action {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+/* Modal scroll styles */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #ffd700;
+}
