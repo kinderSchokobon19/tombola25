@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Casque Musique",
+    "value": "1 gagnant",
+    "icon": "🎧",
+    "quantity": 1
+  },
+  {
+    "id": 2,
+    "name": "Tickets Pistus",
+    "value": "2 gagnants",
+    "icon": "🎫",
+    "quantity": 2
+  },
+  {
+    "id": 3,
+    "name": "Enceinte",
+    "value": "1 gagnant",
+    "icon": "🔊",
+    "quantity": 1
+  },
+  {
+    "id": 4,
+    "name": "Appareil à Raclette",
+    "value": "6 gagnants",
+    "icon": "🧀",
+    "quantity": 6
+  },
+  {
+    "id": 5,
+    "name": "Pre-SG Magnum",
+    "value": "5 gagnants",
+    "icon": "🍾",
+    "quantity": 5
+  },
+  {
+    "id": 6,
+    "name": "Place NND",
+    "value": "1 gagnant",
+    "icon": "🎟️",
+    "quantity": 1
+  },
+  {
+    "id": 7,
+    "name": "Poké",
+    "value": "2 gagnants",
+    "icon": "🍱",
+    "quantity": 2
+  },
+  {
+    "id": 8,
+    "name": "Impressions Photos",
+    "value": "20 impressions - 1 gagnant",
+    "icon": "📸",
+    "quantity": 1
+  },
+  {
+    "id": 9,
+    "name": "Jeux de Raquettes Plage",
+    "value": "3 gagnants",
+    "icon": "🏐",
+    "quantity": 3
+  },
+  {
+    "id": 10,
+    "name": "Serviette de Bain",
+    "value": "1 gagnant",
+    "icon": "🏖️",
+    "quantity": 1
+  }
+]

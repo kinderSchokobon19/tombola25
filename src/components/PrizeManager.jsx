@@ -8,7 +8,7 @@ export default function PrizeManager({ onPrizesLoaded, participants }) {
 
   // Charger les lots depuis le fichier prizes.json
   useEffect(() => {
-    fetch('/prizes.json')
+    fetch(import.meta.env.BASE_URL + 'prizes.json')
       .then(res => res.json())
       .then(data => setPrizes(data))
       .catch(err => console.log('Pas de fichier prizes.json trouvé'))
